@@ -7,18 +7,75 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F400021D2A648595003CEAD3 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F400021C2A648595003CEAD3 /* LocationManager.swift */; };
+		F400021F2A654668003CEAD3 /* CKAsset+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F400021E2A654668003CEAD3 /* CKAsset+Ext.swift */; };
 		F43D9B562A55492000E9DFFD /* DDGApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43D9B552A55492000E9DFFD /* DDGApp.swift */; };
 		F43D9B582A55492000E9DFFD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43D9B572A55492000E9DFFD /* ContentView.swift */; };
 		F43D9B5A2A55492000E9DFFD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F43D9B592A55492000E9DFFD /* Assets.xcassets */; };
 		F43D9B5D2A55492000E9DFFD /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F43D9B5C2A55492000E9DFFD /* Preview Assets.xcassets */; };
+		F43D9B662A5549AD00E9DFFD /* Color+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43D9B652A5549AD00E9DFFD /* Color+Ext.swift */; };
+		F43D9B682A5549C400E9DFFD /* View+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43D9B672A5549C400E9DFFD /* View+Ext.swift */; };
+		F43D9B6C2A554AA700E9DFFD /* LocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43D9B6B2A554AA700E9DFFD /* LocationCell.swift */; };
+		F43D9B6E2A554ACC00E9DFFD /* CustomModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43D9B6D2A554ACC00E9DFFD /* CustomModifiers.swift */; };
+		F43D9B722A554B5100E9DFFD /* DDGButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43D9B712A554B5100E9DFFD /* DDGButton.swift */; };
+		F43D9B752A554BD800E9DFFD /* CircularImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43D9B742A554BD800E9DFFD /* CircularImage.swift */; };
+		F43D9B782A554C7A00E9DFFD /* AppTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43D9B772A554C7A00E9DFFD /* AppTabView.swift */; };
+		F43D9B7B2A554CA900E9DFFD /* LocationDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43D9B7A2A554CA900E9DFFD /* LocationDetailsView.swift */; };
+		F43D9B7D2A554CC700E9DFFD /* LocationMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43D9B7C2A554CC700E9DFFD /* LocationMapView.swift */; };
+		F43D9B7F2A554CEB00E9DFFD /* LocationsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43D9B7E2A554CEB00E9DFFD /* LocationsListView.swift */; };
+		F43D9B812A554D0100E9DFFD /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43D9B802A554D0100E9DFFD /* ProfileView.swift */; };
+		F43D9B842A554D3A00E9DFFD /* DDGLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43D9B832A554D3A00E9DFFD /* DDGLocation.swift */; };
+		F43D9B862A554D6000E9DFFD /* DDGProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43D9B852A554D6000E9DFFD /* DDGProfile.swift */; };
+		F43D9B882A554D7900E9DFFD /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43D9B872A554D7900E9DFFD /* MockData.swift */; };
+		F43D9B8A2A554DC500E9DFFD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43D9B892A554DC500E9DFFD /* Constants.swift */; };
+		F43D9B8D2A554DFC00E9DFFD /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43D9B8C2A554DFC00E9DFFD /* CloudKitManager.swift */; };
+		F44855412A5A913D007E88EA /* AlertItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44855402A5A913D007E88EA /* AlertItem.swift */; };
+		F44855442A5A9E45007E88EA /* LocationMapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44855432A5A9E45007E88EA /* LocationMapViewModel.swift */; };
+		F4582D4D2A78F6E100A6B80A /* CirculalLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4582D4C2A78F6E100A6B80A /* CirculalLoadingView.swift */; };
+		F49645CF2A7010A8004CDEB7 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49645CE2A7010A8004CDEB7 /* LogoView.swift */; };
+		F49645D12A714145004CDEB7 /* XDismissButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49645D02A714145004CDEB7 /* XDismissButton.swift */; };
+		F49645D42A71711E004CDEB7 /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49645D32A71711E004CDEB7 /* PhotoPicker.swift */; };
+		F4A8E1BE2A7DCA5C00DE0CCA /* LocationDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4A8E1BD2A7DCA5C00DE0CCA /* LocationDetailsViewModel.swift */; };
+		F4B339662A769E37004267F9 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B339652A769E37004267F9 /* ProfileViewModel.swift */; };
+		F4DD87E62A67FE3B00F88C0B /* OnBoardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DD87E52A67FE3B00F88C0B /* OnBoardingView.swift */; };
+		F4E825642A727A7F009853DD /* UIImage+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4E825632A727A7F009853DD /* UIImage+Ext.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F400021C2A648595003CEAD3 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		F400021E2A654668003CEAD3 /* CKAsset+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CKAsset+Ext.swift"; sourceTree = "<group>"; };
 		F43D9B522A55492000E9DFFD /* DDG.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DDG.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F43D9B552A55492000E9DFFD /* DDGApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DDGApp.swift; sourceTree = "<group>"; };
 		F43D9B572A55492000E9DFFD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		F43D9B592A55492000E9DFFD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F43D9B5C2A55492000E9DFFD /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		F43D9B652A5549AD00E9DFFD /* Color+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Ext.swift"; sourceTree = "<group>"; };
+		F43D9B672A5549C400E9DFFD /* View+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Ext.swift"; sourceTree = "<group>"; };
+		F43D9B6B2A554AA700E9DFFD /* LocationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCell.swift; sourceTree = "<group>"; };
+		F43D9B6D2A554ACC00E9DFFD /* CustomModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomModifiers.swift; sourceTree = "<group>"; };
+		F43D9B712A554B5100E9DFFD /* DDGButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DDGButton.swift; sourceTree = "<group>"; };
+		F43D9B742A554BD800E9DFFD /* CircularImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularImage.swift; sourceTree = "<group>"; };
+		F43D9B772A554C7A00E9DFFD /* AppTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabView.swift; sourceTree = "<group>"; };
+		F43D9B7A2A554CA900E9DFFD /* LocationDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDetailsView.swift; sourceTree = "<group>"; };
+		F43D9B7C2A554CC700E9DFFD /* LocationMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationMapView.swift; sourceTree = "<group>"; };
+		F43D9B7E2A554CEB00E9DFFD /* LocationsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsListView.swift; sourceTree = "<group>"; };
+		F43D9B802A554D0100E9DFFD /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		F43D9B832A554D3A00E9DFFD /* DDGLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DDGLocation.swift; sourceTree = "<group>"; };
+		F43D9B852A554D6000E9DFFD /* DDGProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DDGProfile.swift; sourceTree = "<group>"; };
+		F43D9B872A554D7900E9DFFD /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
+		F43D9B892A554DC500E9DFFD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		F43D9B8C2A554DFC00E9DFFD /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
+		F43D9B8E2A554F4300E9DFFD /* DDG.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DDG.entitlements; sourceTree = "<group>"; };
+		F44855402A5A913D007E88EA /* AlertItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertItem.swift; sourceTree = "<group>"; };
+		F44855432A5A9E45007E88EA /* LocationMapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationMapViewModel.swift; sourceTree = "<group>"; };
+		F4582D4C2A78F6E100A6B80A /* CirculalLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CirculalLoadingView.swift; sourceTree = "<group>"; };
+		F49645CE2A7010A8004CDEB7 /* LogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
+		F49645D02A714145004CDEB7 /* XDismissButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDismissButton.swift; sourceTree = "<group>"; };
+		F49645D32A71711E004CDEB7 /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
+		F4A8E1BD2A7DCA5C00DE0CCA /* LocationDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDetailsViewModel.swift; sourceTree = "<group>"; };
+		F4B339652A769E37004267F9 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
+		F4DD87E52A67FE3B00F88C0B /* OnBoardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnBoardingView.swift; sourceTree = "<group>"; };
+		F4E825632A727A7F009853DD /* UIImage+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Ext.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +108,10 @@
 		F43D9B542A55492000E9DFFD /* DDG */ = {
 			isa = PBXGroup;
 			children = (
+				F43D9B8E2A554F4300E9DFFD /* DDG.entitlements */,
+				F43D9B822A554D2500E9DFFD /* Models */,
+				F43D9B632A55496D00E9DFFD /* Utils */,
+				F43D9B692A554A7C00E9DFFD /* Views */,
 				F43D9B552A55492000E9DFFD /* DDGApp.swift */,
 				F43D9B572A55492000E9DFFD /* ContentView.swift */,
 				F43D9B592A55492000E9DFFD /* Assets.xcassets */,
@@ -65,6 +126,151 @@
 				F43D9B5C2A55492000E9DFFD /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		F43D9B632A55496D00E9DFFD /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				F43D9B8B2A554DEB00E9DFFD /* Managers */,
+				F43D9B642A55497B00E9DFFD /* Extensions */,
+				F43D9B892A554DC500E9DFFD /* Constants.swift */,
+				F44855402A5A913D007E88EA /* AlertItem.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		F43D9B642A55497B00E9DFFD /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				F43D9B652A5549AD00E9DFFD /* Color+Ext.swift */,
+				F43D9B672A5549C400E9DFFD /* View+Ext.swift */,
+				F400021E2A654668003CEAD3 /* CKAsset+Ext.swift */,
+				F4E825632A727A7F009853DD /* UIImage+Ext.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		F43D9B692A554A7C00E9DFFD /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				F43D9B762A554C6400E9DFFD /* Screens */,
+				F43D9B6F2A554B0400E9DFFD /* CustomViews */,
+				F43D9B6A2A554A8800E9DFFD /* Cells */,
+				F43D9B6D2A554ACC00E9DFFD /* CustomModifiers.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		F43D9B6A2A554A8800E9DFFD /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				F43D9B6B2A554AA700E9DFFD /* LocationCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		F43D9B6F2A554B0400E9DFFD /* CustomViews */ = {
+			isa = PBXGroup;
+			children = (
+				F4582D4B2A78F6B500A6B80A /* LoadingViews */,
+				F49645D22A7169B7004CDEB7 /* UIKitComponents */,
+				F43D9B732A554BCA00E9DFFD /* Images */,
+				F43D9B702A554B1D00E9DFFD /* Buttons */,
+			);
+			path = CustomViews;
+			sourceTree = "<group>";
+		};
+		F43D9B702A554B1D00E9DFFD /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				F43D9B712A554B5100E9DFFD /* DDGButton.swift */,
+				F49645D02A714145004CDEB7 /* XDismissButton.swift */,
+			);
+			path = Buttons;
+			sourceTree = "<group>";
+		};
+		F43D9B732A554BCA00E9DFFD /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				F43D9B742A554BD800E9DFFD /* CircularImage.swift */,
+				F49645CE2A7010A8004CDEB7 /* LogoView.swift */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
+		F43D9B762A554C6400E9DFFD /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				F4A8E1BC2A7DC99E00DE0CCA /* LocationDetailsView */,
+				F4B339642A769E12004267F9 /* ProfileView */,
+				F44855422A5A9E13007E88EA /* LocationMabView */,
+				F43D9B772A554C7A00E9DFFD /* AppTabView.swift */,
+				F43D9B7E2A554CEB00E9DFFD /* LocationsListView.swift */,
+				F4DD87E52A67FE3B00F88C0B /* OnBoardingView.swift */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		F43D9B822A554D2500E9DFFD /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F43D9B832A554D3A00E9DFFD /* DDGLocation.swift */,
+				F43D9B852A554D6000E9DFFD /* DDGProfile.swift */,
+				F43D9B872A554D7900E9DFFD /* MockData.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F43D9B8B2A554DEB00E9DFFD /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				F43D9B8C2A554DFC00E9DFFD /* CloudKitManager.swift */,
+				F400021C2A648595003CEAD3 /* LocationManager.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		F44855422A5A9E13007E88EA /* LocationMabView */ = {
+			isa = PBXGroup;
+			children = (
+				F43D9B7C2A554CC700E9DFFD /* LocationMapView.swift */,
+				F44855432A5A9E45007E88EA /* LocationMapViewModel.swift */,
+			);
+			path = LocationMabView;
+			sourceTree = "<group>";
+		};
+		F4582D4B2A78F6B500A6B80A /* LoadingViews */ = {
+			isa = PBXGroup;
+			children = (
+				F4582D4C2A78F6E100A6B80A /* CirculalLoadingView.swift */,
+			);
+			path = LoadingViews;
+			sourceTree = "<group>";
+		};
+		F49645D22A7169B7004CDEB7 /* UIKitComponents */ = {
+			isa = PBXGroup;
+			children = (
+				F49645D32A71711E004CDEB7 /* PhotoPicker.swift */,
+			);
+			path = UIKitComponents;
+			sourceTree = "<group>";
+		};
+		F4A8E1BC2A7DC99E00DE0CCA /* LocationDetailsView */ = {
+			isa = PBXGroup;
+			children = (
+				F43D9B7A2A554CA900E9DFFD /* LocationDetailsView.swift */,
+				F4A8E1BD2A7DCA5C00DE0CCA /* LocationDetailsViewModel.swift */,
+			);
+			path = LocationDetailsView;
+			sourceTree = "<group>";
+		};
+		F4B339642A769E12004267F9 /* ProfileView */ = {
+			isa = PBXGroup;
+			children = (
+				F43D9B802A554D0100E9DFFD /* ProfileView.swift */,
+				F4B339652A769E37004267F9 /* ProfileViewModel.swift */,
+			);
+			path = ProfileView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -137,8 +343,36 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F43D9B682A5549C400E9DFFD /* View+Ext.swift in Sources */,
+				F43D9B8A2A554DC500E9DFFD /* Constants.swift in Sources */,
+				F4DD87E62A67FE3B00F88C0B /* OnBoardingView.swift in Sources */,
+				F43D9B812A554D0100E9DFFD /* ProfileView.swift in Sources */,
+				F4A8E1BE2A7DCA5C00DE0CCA /* LocationDetailsViewModel.swift in Sources */,
+				F43D9B6C2A554AA700E9DFFD /* LocationCell.swift in Sources */,
+				F44855442A5A9E45007E88EA /* LocationMapViewModel.swift in Sources */,
+				F4B339662A769E37004267F9 /* ProfileViewModel.swift in Sources */,
+				F43D9B862A554D6000E9DFFD /* DDGProfile.swift in Sources */,
 				F43D9B582A55492000E9DFFD /* ContentView.swift in Sources */,
+				F43D9B7D2A554CC700E9DFFD /* LocationMapView.swift in Sources */,
+				F43D9B782A554C7A00E9DFFD /* AppTabView.swift in Sources */,
+				F49645D42A71711E004CDEB7 /* PhotoPicker.swift in Sources */,
+				F43D9B8D2A554DFC00E9DFFD /* CloudKitManager.swift in Sources */,
+				F43D9B842A554D3A00E9DFFD /* DDGLocation.swift in Sources */,
+				F43D9B6E2A554ACC00E9DFFD /* CustomModifiers.swift in Sources */,
+				F49645CF2A7010A8004CDEB7 /* LogoView.swift in Sources */,
+				F49645D12A714145004CDEB7 /* XDismissButton.swift in Sources */,
 				F43D9B562A55492000E9DFFD /* DDGApp.swift in Sources */,
+				F4582D4D2A78F6E100A6B80A /* CirculalLoadingView.swift in Sources */,
+				F44855412A5A913D007E88EA /* AlertItem.swift in Sources */,
+				F43D9B662A5549AD00E9DFFD /* Color+Ext.swift in Sources */,
+				F43D9B752A554BD800E9DFFD /* CircularImage.swift in Sources */,
+				F400021F2A654668003CEAD3 /* CKAsset+Ext.swift in Sources */,
+				F43D9B7F2A554CEB00E9DFFD /* LocationsListView.swift in Sources */,
+				F400021D2A648595003CEAD3 /* LocationManager.swift in Sources */,
+				F43D9B882A554D7900E9DFFD /* MockData.swift in Sources */,
+				F4E825642A727A7F009853DD /* UIImage+Ext.swift in Sources */,
+				F43D9B7B2A554CA900E9DFFD /* LocationDetailsView.swift in Sources */,
+				F43D9B722A554B5100E9DFFD /* DDGButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,12 +498,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = DDG/DDG.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DDG/Preview Content\"";
 				DEVELOPMENT_TEAM = 63JMHD564P;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Dub Dub Grup needs to access your location in relation to your friend and food";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -280,8 +517,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.aasemhany.DDG;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aasemhany.DubDubGrub;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -293,12 +531,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = DDG/DDG.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DDG/Preview Content\"";
 				DEVELOPMENT_TEAM = 63JMHD564P;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Dub Dub Grup needs to access your location in relation to your friend and food";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -309,8 +550,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.aasemhany.DDG;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aasemhany.DubDubGrub;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
