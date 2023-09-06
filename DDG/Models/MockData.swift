@@ -18,4 +18,13 @@ struct MockData {
         record[DDGLocation.kPhoneNumber] = "+201027231201"
         return record
     }
+    
+    static var profile: CKRecord {
+        let record = CKRecord(recordType: RecordType.profile)
+        record[DDGProfile.kFirstName] = "Aasem"
+        record[DDGProfile.kLastName] = "Hany"
+        record[DDGProfile.kCompanyName] = "Mobile Apps Dev @ Crystal Mind"
+        record[DDGProfile.kBio] = "This a test description This a test description This a test description This a test description"
+        return record
+    }
 }

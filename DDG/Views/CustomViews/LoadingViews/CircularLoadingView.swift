@@ -1,5 +1,5 @@
 //
-//  circulal_loading_view.swift
+//  CircularLoadingView.swift
 //  DDG
 //
 //  Created by Aasem Hany on 01/08/2023.
@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-struct CirculalLoadingView: View {
+struct CircularLoadingView: View {
+    
     var body: some View {
         ZStack{
             Color(.systemBackground)
@@ -23,8 +24,8 @@ struct CirculalLoadingView: View {
     }
 }
 
-struct circulal_loading_view_Previews: PreviewProvider {
+struct circular_loading_view_Previews: PreviewProvider {
     static var previews: some View {
-        CirculalLoadingView()
+        CircularLoadingView()
     }
 }

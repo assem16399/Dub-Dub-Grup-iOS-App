@@ -8,6 +8,7 @@
 import Foundation
 import CloudKit
 enum profileContext { case create, update }
+
 final class ProfileViewModel: ObservableObject{
     
     @Published var userBio:String = ""
@@ -31,9 +32,16 @@ final class ProfileViewModel: ObservableObject{
         }
     }
     
+    init(){
+        print("Initialized")
+    }
+    var isUserCheckedIn: Bool {
+        existedProfileRecord?[DDGProfile.kIsCheckedIn] != nil
+    }
+    
     //    var attributedText: AttributedString{
     //        do{
-    //        var text = try AttributedString(markdown:"Bio: \(remainsChars) charcters remains")
+    //        var text = try AttributedString(markdown:"Bio: \(remainsChars) characters remains")
     //            if let range = text.range(of: "\(remainsChars)") {
     //                text[range].foregroundColor = .brandPrimary
     //                if remainsChars < 0 {
@@ -81,7 +89,7 @@ final class ProfileViewModel: ObservableObject{
         // Create reference on UserRecord to point to the DDGProfile we created
         userRecord["userProfile"] = CKRecord.Reference(recordID: profileRecord.recordID, action: .none)
     
-        CloudKitManager.shared.creatProfileOperation(records: [userRecord, profileRecord]){result in
+        CloudKitManager.shared.createProfileOperation(records: [userRecord, profileRecord]){result in
             DispatchQueue.main.async { [self] in
                 hideLoadingView()
                 switch result {
@@ -89,6 +97,7 @@ final class ProfileViewModel: ObservableObject{
                     // Show Success Alert
                     for record in savedRecords where record.recordType == RecordType.profile {
                         existedProfileRecord = record
+                        CloudKitManager.shared.profileRecordId = record.recordID
                     }
                     alertItem = AlertContext.profileCreatedSuccessfully
                     print(savedRecords)
@@ -139,6 +148,32 @@ final class ProfileViewModel: ObservableObject{
             }
         }
     }
+       
+    func checkOut() {
+        guard let existedProfileRecord, isUserCheckedIn else{
+            alertItem = AlertContext.failedToUpdateCheckInStatus
+            return
+        }
+        
+        showLoadingView()
+        
+        existedProfileRecord[DDGProfile.kIsCheckedIn] = nil
+        existedProfileRecord[DDGProfile.kIsCheckedInNilCheck] = 0
+        
+        CloudKitManager.shared.save(record: existedProfileRecord) { result in
+            DispatchQueue.main.async {[self] in
+                switch result {
+                case .success(let savedRecord):
+                    self.existedProfileRecord = savedRecord
+                case .failure(let failure):
+                    alertItem = AlertContext.failedToUpdateCheckInStatus
+                    print(failure.localizedDescription)
+                }
+                hideLoadingView()
+            }
+            
+        }
+    }
     
     private func createProfileRecord() -> CKRecord{
         let profileRecord = CKRecord(recordType: RecordType.profile)
@@ -183,4 +218,5 @@ final class ProfileViewModel: ObservableObject{
     private func showLoadingView(){ isLoading = true }
     
     private func hideLoadingView(){ isLoading = false }
+    
 }

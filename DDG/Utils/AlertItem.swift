@@ -73,5 +73,14 @@ struct AlertContext {
     static let invalidDevice = AlertItem(title: Text("Invalid Device"),
                                                 message: Text("The device you're are using is not supported."),
                                                 dismissButton: .default(Text("Okay")))
+    
+    static let failedToGetCheckedInProfiles = AlertItem(title: Text("Failed to Load Checked In Profiles"),
+                                                message: Text("Unable to retrieve checked in profiles. \nPlease try again later."),
+                                                dismissButton: .default(Text("Okay")))
+   
+    static let failedToUpdateCheckInStatus = AlertItem(title: Text("Failed to Update Checked In Status"),
+                                                message: Text("Unable to update checked in status. \nPlease try again later."),
+                                                dismissButton: .default(Text("Okay")))
+   
 
 }

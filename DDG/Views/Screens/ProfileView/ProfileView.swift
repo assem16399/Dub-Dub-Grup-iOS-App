@@ -49,11 +49,16 @@ struct ProfileView: View {
                         
                         Spacer()
                         
-                        Button{}label: {
-                            Label("Check Out", systemImage: "mappin.and.ellipse")
+                        if viewModel.isUserCheckedIn
+                        {
+                            Button{
+                                viewModel.checkOut()
+                            }label: {
+                                Label("Check Out", systemImage: "mappin.and.ellipse")
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .tint(Color(uiColor: .systemRed))
                         }
-                        .buttonStyle(.borderedProminent)
-                        .tint(Color(uiColor: .systemRed))
                     }
                     
                     UserBioView(userBio: $viewModel.userBio)
@@ -74,7 +79,7 @@ struct ProfileView: View {
             .padding()
             
             if viewModel.isLoading{
-                CirculalLoadingView()
+                CircularLoadingView()
             }
         }
         

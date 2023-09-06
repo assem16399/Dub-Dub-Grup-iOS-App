@@ -9,7 +9,7 @@ import SwiftUI
 
 struct LocationDetailsView: View {
     
-
+    
     @ObservedObject var viewModel: LocationDetailsViewModel
     
     let gridColumns = [
@@ -20,87 +20,126 @@ struct LocationDetailsView: View {
     
     var body: some View {
         
-        VStack{
-            BannerImage(uiImage: viewModel.location.createImage(for: .banner))
-
-            
-            VStack {
-                AddressView(address: viewModel.location.address)
+        ZStack {
+            VStack{
+                BannerImage(uiImage: viewModel.location.createImage(for: .banner))
                 
-                DescriptionView(desc: viewModel.location.description)
+                VStack {
+                    AddressView(address: viewModel.location.address)
+                    
+                    DescriptionView(desc: viewModel.location.description)
+                    
+                    ZStack{
+                        Color(uiColor: .secondarySystemBackground)
+                            .cornerRadius(50)
+                        
+                        HStack{
+                            Spacer()
+                            
+                            Button{
+                                viewModel.getDirections()
+                            } label:{ LocationOptionIcon(icon: "location.fill") }
+                            
+                            Spacer()
+                            
+                            Link(destination: URL(string: viewModel.location.websiteURL)!,
+                                 label:{ LocationOptionIcon(icon: "network") })
+                            
+                            Spacer()
+                            
+                            Button{
+                                viewModel.callLocationNumber()
+                            } label:{ LocationOptionIcon(icon: "phone.fill") }
+                            
+                            Spacer()
+                            
+                            if let _ =  CloudKitManager.shared.profileRecordId {
+                                Button{
+                                    if viewModel.isLoading { return }
+                                    viewModel.changeCheckInStatus(to: viewModel.isUserCheckedIn ? .checkedOut : .checkedIn)
+                                } label:{
+                                    if viewModel.isLoading {
+                                        ProgressView()
+                                            .tint(.brandPrimary)
+                                            .scaleEffect(2)
+                                    }else {
+                                        LocationOptionIcon(
+                                            icon: viewModel.isUserCheckedIn
+                                            ? "person.fill.xmark"
+                                            : "person.fill.checkmark",
+                                            bgColor: viewModel.isUserCheckedIn
+                                            ? .grubRed
+                                            : .brandPrimary)
+                                    }
+                                }
+                                Spacer()
+                            }
+                            
+                        }
+                    }
+                    .frame(height: 80)
+                    
+                    Text("Who's Here?")
+                        .font(.title2)
+                        .bold()
+                        .padding(.vertical, 20)
+                    
+                }.padding(.horizontal)
                 
-                ZStack{
-                    Color(uiColor: .secondarySystemBackground)
-                        .cornerRadius(50)
-                        
-                    HStack{
-                        Spacer()
-                        
-                        Button{
-                            viewModel.getDirections()
-                        } label:{ LocationOptionIcon(icon: "location.fill") }
-                        
-                        Spacer()
-                        
-                        Link(destination: URL(string: viewModel.location.websiteURL)!,
-                             label:{ LocationOptionIcon(icon: "network") })
-                        
-                        Spacer()
-                        
-                        Button{
-                            viewModel.callLocationNumber()
-                        } label:{
-                            LocationOptionIcon(icon: "phone.fill") }
-                        
-                        Spacer()
-                        
-                        Button{} label:{
-                            LocationOptionIcon(icon: "person.fill.xmark",bgColor: .red) }
-                        
-                        Spacer()
+                VStack{
+                    if viewModel.isLoading { CircularLoadingView() }else{
+                        if viewModel.checkedInProfiles.isEmpty {
+                            Text("No one checked in here yet")
+                                .font(.headline)
+                                .padding(.top, 30)
+                        }
+                        else{
+                            List {
+                                LazyVGrid(columns: gridColumns) {
+                                    ForEach(viewModel.checkedInProfiles){
+                                        profile in
+                                        UserAvatarView(
+                                            name: profile.firstName,
+                                            image: profile.createAvatarImage())
+                                        .onTapGesture{
+                                            withAnimation{
+                                                viewModel.isCheckedInProfileDisplayed = true
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            .listStyle(.plain)
+                            .listRowInsets(EdgeInsets())
+                            .listSectionSeparator(.hidden)
+                        }
                     }
                 }
-                .frame(height: 80)
                 
-                Text("Who's Here?")
-                    .font(.title2)
-                    .bold()
-                    .padding(.vertical, 20)
-                
-            }.padding(.horizontal)
-            
-            List {
-                LazyVGrid(columns: gridColumns) {
-                    UserAvatarView()
-                    UserAvatarView()
-                    UserAvatarView()
-                    UserAvatarView()
-                    UserAvatarView()
-                    UserAvatarView()
-                    UserAvatarView()
-                    UserAvatarView()
-                    UserAvatarView()
-                    UserAvatarView()
-                }
+                Spacer()
             }
-            .listStyle(.plain)
-        }
-        .listRowInsets(EdgeInsets())
-        .listSectionSeparator(.hidden)
-        .navigationTitle(viewModel.location.name)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar{
-            ToolbarItem(placement: .navigationBarTrailing){
-                Button{}label: {
-                    Text("Dismiss")
-                        .foregroundColor(.red)
-                }
+            .navigationTitle(viewModel.location.name)
+            .navigationBarTitleDisplayMode(.inline)
+            // Uncomment if you are using a sheet to display location details
+            //            .toolbar{
+            //                ToolbarItem(placement: .navigationBarTrailing){
+            //                    Button{}label: {
+            //                        Text("Dismiss")
+            //                            .foregroundColor(.red)
+            //                    }
+            //                }
+            //            }
+            .alert(item: $viewModel.alertItem){ alert in
+                Alert(title: alert.title,message: alert.message,dismissButton: alert.dismissButton)
             }
-        }
-        .alert(item: $viewModel.alertItem){ alert in
-            Alert(title: alert.title,message: alert.message,dismissButton: alert.dismissButton)
-        }
-        
+            .blur(radius: viewModel.isCheckedInProfileDisplayed ? 20 : 0)
+            .disabled(viewModel.isCheckedInProfileDisplayed)
+            if viewModel.isCheckedInProfileDisplayed {
+                ProfileDetailsView(isProfileDisplayed: $viewModel.isCheckedInProfileDisplayed,profile: DDGProfile(record: MockData.profile))
+                    .transition(.slide)
+                    .zIndex(1)
+            }
+        }.onAppear{ viewModel.getCheckedInProfiles() }
     }
 }
 
@@ -118,6 +157,7 @@ struct LocationOptionIcon: View {
         self.icon = icon
         self.bgColor = bgColor
     }
+    
     var body: some View {
         ZStack{
             Circle()
@@ -133,11 +173,13 @@ struct LocationOptionIcon: View {
 }
 
 struct UserAvatarView: View {
+    let name: String
+    let image: UIImage
     var body: some View {
         VStack {
-            CircularImage(imageName: "default-avatar", radius: 40)
+            CircularImage(uiImage: image, radius: 40)
             
-            Text("Aasem")
+            Text(name)
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
             
@@ -161,14 +203,14 @@ struct BannerImage: View {
     
     var body: some View {
         (imageName == nil
-            ? Image(uiImage: uiImage!)
-            : Image(imageName!))
-            .resizable()
-            .scaledToFill()
-            .frame(height: 120)
-            .padding(.bottom )
-            .clipped()
-
+         ? Image(uiImage: uiImage!)
+         : Image(imageName!))
+        .resizable()
+        .scaledToFill()
+        .frame(height: 120)
+        .padding(.bottom )
+        .clipped()
+        
     }
 }
 
