@@ -8,7 +8,8 @@
 import SwiftUI
 import UIKit
 
-struct CircularImage: View {
+struct CircularImage: View{
+    
     let imageName: String?
     let radius: CGFloat
     let uiImage: UIImage?

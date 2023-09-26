@@ -7,12 +7,13 @@
 
 import SwiftUI
 
-struct ProfileDetailsView: View {
+struct ProfileDetailsModalView: View {
     @Binding var isProfileDisplayed: Bool
     let profile: DDGProfile
     var body: some View {
         ZStack(alignment: .top){
             CircularImage(uiImage: profile.createAvatarImage(), radius: 50)
+                .accessibilityHidden(true)
                 .alignmentGuide(VerticalAlignment.top) { $0[VerticalAlignment.center] }
                         .zIndex(1)
                         .shadow(radius: 10)
@@ -28,6 +29,7 @@ struct ProfileDetailsView: View {
                     .minimumScaleFactor(0.75)
                 
                 Text("\(profile.companyName)")
+                    .accessibilityLabel(Text("Works at, \(profile.companyName)"))
                     .lineLimit(2)
                     .foregroundColor(Color.secondary)
                     .minimumScaleFactor(0.75)
@@ -36,6 +38,7 @@ struct ProfileDetailsView: View {
                     .frame(height: 20)
 
                 Text("\(profile.bio)")
+                    .accessibilityLabel(Text("Bio, \(profile.bio)"))
                     .lineLimit(5)
 
                 Spacer()
@@ -64,6 +67,6 @@ struct ProfileDetailsView: View {
 
 struct ProfileDetails_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileDetailsView(isProfileDisplayed: .constant(true),profile: DDGProfile(record: MockData.profile))
+        ProfileDetailsModalView(isProfileDisplayed: .constant(true),profile: DDGProfile(record: MockData.profile))
     }
 }
