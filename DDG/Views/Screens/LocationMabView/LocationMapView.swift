@@ -10,51 +10,48 @@ import MapKit
 
 struct LocationMapView: View {
     @EnvironmentObject private var locationManager: LocationManager
-    @StateObject private var mapViewModel = LocationMabViewModel()
-    
+    @StateObject private var viewModel = LocationMabViewModel()
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
+
     var body: some View {
-        ZStack{
+        ZStack(alignment: .top){
             
-            Map(coordinateRegion: $mapViewModel.region, showsUserLocation: true, annotationItems: locationManager.locations){ ddgLocation in
+            Map(coordinateRegion: $viewModel.region,
+                showsUserLocation: true,
+                annotationItems: locationManager.locations){ ddgLocation in
                 
                 //             MapMarker(coordinate: ddgLocation.location.coordinate,
                 //                       tint: .brandPrimary)
-                
-                MapAnnotation(coordinate:ddgLocation.location.coordinate, anchorPoint: CGPoint(x: 0.5, y: 0.75)){
-                    DDGAnnotation(location: ddgLocation,profilesCount: mapViewModel.checkedInProfiles[ddgLocation.id,default: 0])
-                        .onTapGesture { mapViewModel.selectedMapLocation = ddgLocation }
+                MapAnnotation(coordinate:ddgLocation.location.coordinate,
+                              anchorPoint: CGPoint(x: 0.5, y: 0.75)){
+                    
+                    let checkedInProfilesCount = viewModel.checkedInProfiles[ddgLocation.id,default: 0]
+                    DDGAnnotation(location: ddgLocation,
+                                  profilesCount: checkedInProfilesCount)
+                    .onTapGesture { viewModel.selectedMapLocation = ddgLocation }
                 }
                 
             }
             .tint(.brandSecondary)
             .ignoresSafeArea()
             
-            VStack{
-                LogoView(height: 70).shadow(radius: 10)
-                
-                Spacer()
-            }
-            
-        }.alert(item: $mapViewModel.alertItem){ alertItem in
-            
-            Alert(title: alertItem.title,
-                  message: alertItem.message,
-                  dismissButton: alertItem.dismissButton)
-            
+            LogoView(height: 70).shadow(radius: 10)
+//                    .accessibilityHidden(true)
         }
+        .alert(item: $viewModel.alertItem){ Alert(from: $0) }
         .onAppear{
-            if locationManager.locations.isEmpty{ mapViewModel.getLocations(for: locationManager) }
+            if locationManager.locations.isEmpty{ viewModel.getLocations(for: locationManager) }
             
-            mapViewModel.getCheckedInCount()
+            viewModel.getCheckedInCount()
             
         }
-        .sheet(isPresented: $mapViewModel.isShowingDetailView){
+        .sheet(isPresented: $viewModel.isShowingDetailView){
             NavigationStack{
-                LocationDetailsView(viewModel: LocationDetailsViewModel(location: mapViewModel.selectedMapLocation!))
+                viewModel.createLocationDetailsView(in: dynamicTypeSize)
                     .toolbar{
                         ToolbarItem(placement: .navigationBarTrailing){
                             Button{
-                                mapViewModel.isShowingDetailView = false
+                                viewModel.isShowingDetailView = false
                             } label: { Text("Dismiss") }
                         }
                     }

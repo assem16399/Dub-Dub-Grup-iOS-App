@@ -10,7 +10,7 @@ import SwiftUI
 struct LogoView: View {
     let height: CGFloat
     var body: some View {
-        Image("ddg-map-logo")
+        Image(decorative: "ddg-map-logo")
             .resizable()
             .scaledToFit()
             .frame(height: height)

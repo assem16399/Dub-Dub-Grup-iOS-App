@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+extension Alert{
+    init(from alertItem: AlertItem){
+        self.init(title: alertItem.title,message: alertItem.message,dismissButton: alertItem.dismissButton)
+    }
+}
 
 struct AlertItem: Identifiable {
     let id = UUID()
@@ -64,18 +69,22 @@ struct AlertContext {
                                                 message: Text("Unable to update your profile. \nPlease try agian later."),
                                                 dismissButton: .default(Text("Okay")))
     
+    
+    //MARK: - LocationListView Alerts
+    static let failedToAllGetCheckedInProfiles = AlertItem(title: Text("Failed to Load Checked In Profiles"),
+                                                message: Text("Unable to retrieve checked in profiles. \nPlease try again later."),
+                                                dismissButton: .default(Text("Okay")))
     //MARK: - LocationDetails Alerts
     static let invalidPhoneNumber = AlertItem(title: Text("Invalid Phone Number"),
                                                 message: Text("The phone number for the location is invalid."),
                                                 dismissButton: .default(Text("Okay")))
 
-    //MARK: - LocationDetails Alerts
     static let invalidDevice = AlertItem(title: Text("Invalid Device"),
                                                 message: Text("The device you're are using is not supported."),
                                                 dismissButton: .default(Text("Okay")))
     
     static let failedToGetCheckedInProfiles = AlertItem(title: Text("Failed to Load Checked In Profiles"),
-                                                message: Text("Unable to retrieve checked in profiles. \nPlease try again later."),
+                                                message: Text("Unable to retrieve location checked in profiles. \nPlease try again later."),
                                                 dismissButton: .default(Text("Okay")))
    
     static let failedToUpdateCheckInStatus = AlertItem(title: Text("Failed to Update Checked In Status"),

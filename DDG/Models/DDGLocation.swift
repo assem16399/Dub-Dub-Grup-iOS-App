@@ -44,7 +44,7 @@ struct DDGLocation: Identifiable, Hashable {
     
     func createImage(for dimension: ImageDimension) -> UIImage {
         guard let bannerAsset else {
-            return ImageDimension.getPlaceHolder(for: dimension)
+            return dimension.placeHolder
         }
         return bannerAsset.convertToUIImage(in: dimension)
         

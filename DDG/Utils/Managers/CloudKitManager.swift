@@ -71,7 +71,6 @@ final class CloudKitManager {
                 return
             }
             completed(.success(savedRecords))
-            print(savedRecords)
         }
         CKContainer.default().publicCloudDatabase.add(operation)
     }

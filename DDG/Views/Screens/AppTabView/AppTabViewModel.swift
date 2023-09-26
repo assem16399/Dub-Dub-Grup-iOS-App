@@ -9,67 +9,67 @@ import SwiftUI
 import CoreLocation
 import MapKit
 
-final class AppTabViewModel:NSObject, ObservableObject{
-    
-    
-    var deviceLocationManager: CLLocationManager?
-    
-    @Published var alertItem: AlertItem?
-    
-    @Published var isOnBoardingDisplayed = false
-    
-    let kUserOnBoardStatus = "userOnBoardStatus"
-
-    
-    var hasUserOnBoarded: Bool {
-        return UserDefaults().bool(forKey: kUserOnBoardStatus)
-    }
-    
-    func runStartupChecks() {
-        if hasUserOnBoarded {
-            checkIfLocationServicesIsEnabled()
-        }else{
-            isOnBoardingDisplayed = true
-            UserDefaults().setValue(true, forKey: kUserOnBoardStatus)
+extension AppTabView{
+    final class AppTabViewModel:NSObject, ObservableObject, CLLocationManagerDelegate{
+        
+        @Published var alertItem: AlertItem?
+        @Published var isOnBoardingDisplayed = false
+        @AppStorage("userOnBoardStatus") var hasSeenOnBoardingView = false{
+            didSet{
+                isOnBoardingDisplayed = hasSeenOnBoardingView
+            }
         }
-    }
-    
-    func checkIfLocationServicesIsEnabled() {
-        DispatchQueue.global().async {
-            if CLLocationManager.locationServicesEnabled() {
-                DispatchQueue.main.async {
-                    self.deviceLocationManager = CLLocationManager()
-                    //deviceLocationManager?.desiredAccuracy = kCLLocationAccuracyBest // default iOS accuracy
-                    self.deviceLocationManager!.delegate = self
-                }
+        var deviceLocationManager: CLLocationManager?
+        let kUserOnBoardStatusKey = "userOnBoardStatus"
+        
+        
+        
+        func runStartupChecks() {
+            if hasSeenOnBoardingView {
+                checkIfLocationServicesIsEnabled()
             } else {
-                // Show an alert
-                DispatchQueue.main.async {
-                    self.alertItem = AlertContext.locationDisabled
+                hasSeenOnBoardingView = true
+            }
+        }
+        
+        func checkIfLocationServicesIsEnabled() {
+            DispatchQueue.global().async {
+                if CLLocationManager.locationServicesEnabled() {
+                    DispatchQueue.main.async {
+                        self.deviceLocationManager = CLLocationManager()
+                        //deviceLocationManager?.desiredAccuracy = kCLLocationAccuracyBest // default iOS accuracy
+                        self.deviceLocationManager!.delegate = self
+                    }
+                } else {
+                    // Show an alert
+                    DispatchQueue.main.async {
+                        self.alertItem = AlertContext.locationDisabled
+                    }
                 }
             }
         }
-    }
-    
-    private func checkLocationAuth() {
-        guard let deviceLocationManager else { return }
-        switch deviceLocationManager.authorizationStatus {
-        case .notDetermined:
-            deviceLocationManager.requestWhenInUseAuthorization()
-        case .restricted:
-            alertItem = AlertContext.locationRestricted
-        case .denied:
-            alertItem = AlertContext.locationDenied
-        case .authorizedAlways, .authorizedWhenInUse:
-            break
-        @unknown default:
-            break
+        
+        private func checkLocationAuth() {
+            guard let deviceLocationManager else { return }
+            switch deviceLocationManager.authorizationStatus {
+            case .notDetermined:
+                deviceLocationManager.requestWhenInUseAuthorization()
+            case .restricted:
+                alertItem = AlertContext.locationRestricted
+            case .denied:
+                alertItem = AlertContext.locationDenied
+            case .authorizedAlways, .authorizedWhenInUse:
+                break
+            @unknown default:
+                break
+            }
+        }
+        
+        func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+            checkLocationAuth()
         }
     }
-}
 
-extension AppTabViewModel: CLLocationManagerDelegate{
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        checkLocationAuth()
-    }
+    
+ 
 }

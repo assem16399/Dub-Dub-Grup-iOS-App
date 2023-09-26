@@ -11,15 +11,16 @@ struct LocationDetailsView: View {
     
     
     @ObservedObject var viewModel: LocationDetailsViewModel
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
     
-    let gridColumns = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible())
-    ]
+    var gridColumns: [GridItem] {
+        dynamicTypeSize < .accessibility1 ? [
+            GridItem(.flexible()),
+            GridItem(.flexible()),
+            GridItem(.flexible())
+        ]: [GridItem(.flexible())]}
     
     var body: some View {
-        
         ZStack {
             VStack{
                 BannerImage(uiImage: viewModel.location.createImage(for: .banner))
@@ -28,82 +29,73 @@ struct LocationDetailsView: View {
                     AddressView(address: viewModel.location.address)
                     
                     DescriptionView(desc: viewModel.location.description)
-                    
-                    ZStack{
-                        Color(uiColor: .secondarySystemBackground)
-                            .cornerRadius(50)
                         
+                    
                         HStack{
                             Spacer()
                             
                             Button{
                                 viewModel.getDirections()
-                            } label:{ LocationOptionIcon(icon: "location.fill") }
+                            } label:{
+                                LocationOptionIcon(icon: "location.fill")
+                            }.accessibilityLabel(Text("Get directions."))
                             
                             Spacer()
                             
-                            Link(destination: URL(string: viewModel.location.websiteURL)!,
-                                 label:{ LocationOptionIcon(icon: "network") })
+                            Link(destination: URL(string: viewModel.location.websiteURL)!){
+                                LocationOptionIcon(icon: "network")
+                            }.accessibilityRemoveTraits(.isButton)
+                                .accessibilityLabel(Text("Go to website."))
                             
                             Spacer()
                             
                             Button{
                                 viewModel.callLocationNumber()
-                            } label:{ LocationOptionIcon(icon: "phone.fill") }
+                            } label:{
+                                LocationOptionIcon(icon: "phone.fill")
+                            }.accessibilityLabel(Text("Call location."))
+                            
                             
                             Spacer()
                             
                             if let _ =  CloudKitManager.shared.profileRecordId {
                                 Button{
-                                    if viewModel.isLoading { return }
-                                    viewModel.changeCheckInStatus(to: viewModel.isUserCheckedIn ? .checkedOut : .checkedIn)
+                                    viewModel.changeCheckInStatus()
                                 } label:{
-                                    if viewModel.isLoading {
-                                        ProgressView()
-                                            .tint(.brandPrimary)
-                                            .scaleEffect(2)
-                                    }else {
-                                        LocationOptionIcon(
-                                            icon: viewModel.isUserCheckedIn
-                                            ? "person.fill.xmark"
-                                            : "person.fill.checkmark",
-                                            bgColor: viewModel.isUserCheckedIn
-                                            ? .grubRed
-                                            : .brandPrimary)
-                                    }
-                                }
+                                    LocationOptionIcon(
+                                        icon: viewModel.checkInButtonIcon,
+                                        bgColor: viewModel.checkInButtonColor)
+                                    
+                                }.accessibilityLabel(viewModel.checkInButtonA11yLabel)
+                                .disabled(viewModel.isLoading)
+                                
                                 Spacer()
                             }
                             
                         }
-                    }
-                    .frame(height: 80)
+                        .padding(.vertical,5)
+                        .background( Color(uiColor: .secondarySystemBackground))
+                        .clipShape(.capsule)
+                        .frame(height: 60)
                     
-                    Text("Who's Here?")
-                        .font(.title2)
-                        .bold()
-                        .padding(.vertical, 20)
+                        GridHeaderText(peopleCount: viewModel.checkedInProfiles.count)
                     
                 }.padding(.horizontal)
                 
                 VStack{
-                    if viewModel.isLoading { CircularLoadingView() }else{
+                    if viewModel.isLoading { CircularLoadingView() }
+                    else {
                         if viewModel.checkedInProfiles.isEmpty {
-                            Text("No one checked in here yet")
-                                .font(.headline)
-                                .padding(.top, 30)
-                        }
-                        else{
-                            List {
+                            GridEmptyStateView()
+                        } else {
+                            ScrollView {
                                 LazyVGrid(columns: gridColumns) {
                                     ForEach(viewModel.checkedInProfiles){
                                         profile in
-                                        UserAvatarView(
-                                            name: profile.firstName,
-                                            image: profile.createAvatarImage())
+                                        UserAvatarView(profile: profile)
                                         .onTapGesture{
                                             withAnimation{
-                                                viewModel.isCheckedInProfileDisplayed = true
+                                                viewModel.showDetails(of: profile, in: dynamicTypeSize)
                                             }
                                         }
                                     }
@@ -115,37 +107,38 @@ struct LocationDetailsView: View {
                         }
                     }
                 }
+                .padding(.horizontal)
                 
-                Spacer()
+                Spacer(minLength: 0)
             }
-            .navigationTitle(viewModel.location.name)
-            .navigationBarTitleDisplayMode(.inline)
-            // Uncomment if you are using a sheet to display location details
-            //            .toolbar{
-            //                ToolbarItem(placement: .navigationBarTrailing){
-            //                    Button{}label: {
-            //                        Text("Dismiss")
-            //                            .foregroundColor(.red)
-            //                    }
-            //                }
-            //            }
-            .alert(item: $viewModel.alertItem){ alert in
-                Alert(title: alert.title,message: alert.message,dismissButton: alert.dismissButton)
+            .blur(radius: viewModel.isCheckedInProfileModalDisplayed ? 20 : 0)
+            .disabled(viewModel.isCheckedInProfileModalDisplayed)
+            
+            if viewModel.isCheckedInProfileModalDisplayed{
+                ProfileDetailsModalView(
+                    isProfileDisplayed: $viewModel.isCheckedInProfileModalDisplayed,
+                    profile: viewModel.selectedProfile!)
+                
             }
-            .blur(radius: viewModel.isCheckedInProfileDisplayed ? 20 : 0)
-            .disabled(viewModel.isCheckedInProfileDisplayed)
-            if viewModel.isCheckedInProfileDisplayed {
-                ProfileDetailsView(isProfileDisplayed: $viewModel.isCheckedInProfileDisplayed,profile: DDGProfile(record: MockData.profile))
-                    .transition(.slide)
-                    .zIndex(1)
-            }
-        }.onAppear{ viewModel.getCheckedInProfiles() }
+        }
+        .onAppear{ viewModel.getCheckedInProfiles() }
+        .alert(item: $viewModel.alertItem){ Alert(from: $0) }
+        .sheet(isPresented: $viewModel.isCheckedInProfileSheetDisplayed){
+            ProfileDetailsSheetView(
+                isProfileDisplayed: $viewModel.isCheckedInProfileSheetDisplayed,
+                profile: viewModel.selectedProfile!)
+        }
+        .navigationTitle(viewModel.location.name)
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
 struct LocationDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        LocationDetailsView(viewModel: LocationDetailsViewModel(location: DDGLocation(record: MockData.location)))
+        NavigationStack{
+            LocationDetailsView(viewModel: LocationDetailsView.LocationDetailsViewModel(location: DDGLocation(record: MockData.location)))
+        }
+        
     }
 }
 
@@ -162,10 +155,11 @@ struct LocationOptionIcon: View {
         ZStack{
             Circle()
                 .foregroundColor(bgColor)
-                .padding(.vertical, 10)
             
             Image(systemName: icon)
-                .scaledToFit()
+                .resizable()
+                .scaledToFill()
+                .frame(width: 25, height: 25)
                 .imageScale(.large)
                 .foregroundColor(.white)
         }
@@ -173,17 +167,23 @@ struct LocationOptionIcon: View {
 }
 
 struct UserAvatarView: View {
-    let name: String
-    let image: UIImage
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
+    let profile: DDGProfile
+    
     var body: some View {
         VStack {
-            CircularImage(uiImage: image, radius: 40)
+            CircularImage(uiImage: profile.avatarImage,
+                          radius: dynamicTypeSize >= .accessibility1 ? 100 : 40)
             
-            Text(name)
+            Text(profile.firstName)
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
             
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityAddTraits(.isButton)
+        .accessibilityHint(Text("Show's \(profile.firstName) profile popup."))
+        .accessibilityLabel(Text("\(profile.firstName) \(profile.lastName)"))
     }
 }
 
@@ -210,6 +210,7 @@ struct BannerImage: View {
         .frame(height: 120)
         .padding(.bottom )
         .clipped()
+        .accessibilityHidden(true)
         
     }
 }
@@ -231,7 +232,29 @@ struct DescriptionView: View {
     var body: some View {
         Text(desc)
             .minimumScaleFactor(0.7)
-            .lineLimit(3)
-            .padding(.bottom, 20)
+            .padding(.horizontal)
+            .fixedSize(horizontal: false, vertical: true)
+    }
+}
+
+struct GridHeaderText: View {
+    let peopleCount: Int
+    
+    var body: some View {
+        Text("Who's Here?")
+            .font(.title2)
+            .bold()
+            .padding(.vertical, 20)
+            .accessibilityAddTraits(.isHeader)
+            .accessibilityLabel(Text("Who's here? \(peopleCount) checked in"))
+            .accessibilityHint(Text("Bottom section is scrollable"))
+    }
+}
+
+struct                         GridEmptyStateView: View {
+    var body: some View {
+        Text("No one checked in here yet")
+            .font(.headline)
+            .padding(.top, 30)
     }
 }

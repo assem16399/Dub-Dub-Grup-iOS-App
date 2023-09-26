@@ -10,27 +10,31 @@ import SwiftUI
 struct LocationsListView: View {
     @EnvironmentObject private var locationManager: LocationManager
     @StateObject private var viewModel = LocationsListViewModel()
-    
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
     var body: some View {
-        NavigationStack{
-            List{
-                ForEach(locationManager.locations){ location in
-                    NavigationLink(value: location, label: {
-                        LocationsCell(location: location,
-                                      checkedInProfiles: viewModel.checkedInProfiles[location.id] ?? [])
-                            .padding(.trailing)
-                    })
+        List{
+            ForEach(locationManager.locations){ location in
+                NavigationLink(
+                    destination:
+                        viewModel.createLocationDetailsView(for: location,
+                                                            in: dynamicTypeSize))
+                {
+                    let checkedInProfiles = viewModel.checkedInProfiles[location.id, default: []]
+                    LocationsCell(location: location,
+                                  checkedInProfiles: checkedInProfiles)
+                    .listRowSeparatorTint(.brandPrimary)
+                    .padding(.trailing)
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel(
+                        Text(viewModel.getVoiceOverSummary(for: location)))
                 }
+                
             }
-            .listStyle(.plain)
-            .navigationTitle("Locations")
-            .navigationDestination(for: DDGLocation.self){ location in
-                LocationDetailsView(viewModel: LocationDetailsViewModel(location: location))
-                    .navigationTitle("Grub Spots")
-                    .ignoresSafeArea(edges: .trailing)
-            }.onAppear{ viewModel.getAllPlaceCheckedInProfiles() }
-
         }
+        .listStyle(.plain)
+        .alert(item: $viewModel.alertItem){Alert(from: $0)}
+        .navigationTitle("Locations")
+        .onAppear{ viewModel.getAllPlaceCheckedInProfiles() }
     }
 }
 struct LocationsListView_Previews: PreviewProvider {

@@ -28,13 +28,11 @@ struct LocationsCell: View {
                         Text("Nobody's Checked In")
                             .fontWeight(.semibold)
                             .foregroundColor(.secondary)
-                    }
-                    else {
+                    } else {
                         CheckedInUsersListView(checkedInProfiles: checkedInProfiles)
                     }
-            }
+            }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
         }
-        .listRowSeparatorTint(.brandPrimary)
         
     }
 }
@@ -42,11 +40,16 @@ struct LocationsCell: View {
 
 struct LocationsCell_Previews: PreviewProvider {
     static var previews: some View {
-        LocationsCell(location: DDGLocation(record: MockData.location),checkedInProfiles: [])
+        LocationsCell(location: DDGLocation(record: MockData.location),checkedInProfiles: [
+            DDGProfile(record: MockData.profile),
+            DDGProfile(record: MockData.profile),
+            DDGProfile(record: MockData.profile),
+            
+        ])
     }
 }
 
-struct CheckedInUsersListView: View {
+fileprivate struct CheckedInUsersListView: View {
     let checkedInProfiles:[DDGProfile]
     
     var body: some View {
@@ -54,18 +57,19 @@ struct CheckedInUsersListView: View {
             
             ForEach(checkedInProfiles.indices, id: \.self){ index in
                 if index <= 3 {
-                    CircularImage(uiImage: checkedInProfiles[index].createAvatarImage(),radius: 17.5)
-
-                    
+                    let avatarImage = checkedInProfiles[index].avatarImage
+                    CircularImage(uiImage: avatarImage, radius: 17.5)
                 } else if index == 4 {
-                    AdditionalCheckedInUsersCountView(uiImage: checkedInProfiles[index].createAvatarImage(), additionalUsersCount: checkedInProfiles.count - index)
+                    AdditionalCheckedInUsersCountView(
+                        uiImage: checkedInProfiles[index].avatarImage,
+                        additionalUsersCount: checkedInProfiles.count - index)
                 }
             }
-        }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+        }
     }
 }
 
-struct AdditionalCheckedInUsersCountView: View {
+fileprivate struct AdditionalCheckedInUsersCountView: View {
     let uiImage: UIImage
     let additionalUsersCount: Int
     

@@ -32,9 +32,6 @@ final class ProfileViewModel: ObservableObject{
         }
     }
     
-    init(){
-        print("Initialized")
-    }
     var isUserCheckedIn: Bool {
         existedProfileRecord?[DDGProfile.kIsCheckedIn] != nil
     }
@@ -80,7 +77,6 @@ final class ProfileViewModel: ObservableObject{
         
         guard let userRecord = CloudKitManager.shared.userRecord else {
             // Show Alert
-            print("UserRecord is nil")
             hideLoadingView()
             alertItem = AlertContext.noUserRecord
             return
@@ -100,11 +96,9 @@ final class ProfileViewModel: ObservableObject{
                         CloudKitManager.shared.profileRecordId = record.recordID
                     }
                     alertItem = AlertContext.profileCreatedSuccessfully
-                    print(savedRecords)
-                case .failure(let error):
+                case .failure(_):
                     // Show Error Alert
                     alertItem = AlertContext.failedToCreateProfile
-                    print(error.localizedDescription)
                 }
             }
         }
@@ -115,7 +109,6 @@ final class ProfileViewModel: ObservableObject{
         showLoadingView()
         guard let userRecord = CloudKitManager.shared.userRecord else {
             // Show Alert
-            print("UserRecord is nil")
             hideLoadingView()
             alertItem = AlertContext.noUserRecord
             return
@@ -138,7 +131,7 @@ final class ProfileViewModel: ObservableObject{
                     lastName = profile.lastName
                     job = profile.companyName
                     userBio = profile.bio
-                    avatar = profile.createAvatarImage()
+                    avatar = profile.avatarImage
                 case .failure(let error):
                     // Show Alert
                     alertItem = AlertContext.failedToRetrieveProfile

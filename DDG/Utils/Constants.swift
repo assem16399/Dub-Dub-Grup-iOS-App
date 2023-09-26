@@ -21,7 +21,7 @@ enum PlaceHolderImage{
 enum ImageDimension {
     case square, banner
     
-    static func getPlaceHolder(for dimension: ImageDimension) -> UIImage {
-        return dimension == .square ? PlaceHolderImage.square : PlaceHolderImage.banner
+    var placeHolder: UIImage {
+        return self == .square ? PlaceHolderImage.square : PlaceHolderImage.banner
     }
 }

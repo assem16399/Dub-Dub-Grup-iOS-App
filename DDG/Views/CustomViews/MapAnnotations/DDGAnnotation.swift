@@ -34,6 +34,9 @@ struct DDGAnnotation: View {
                 .font(.caption)
                 .fontWeight(.semibold)
         }
+
+        .accessibilityLabel(
+            "Map Pin, \(location.name), \(profilesCount) people checked in.")
     }
 }
 

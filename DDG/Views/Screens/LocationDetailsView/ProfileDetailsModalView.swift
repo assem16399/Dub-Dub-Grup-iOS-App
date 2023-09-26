@@ -12,11 +12,14 @@ struct ProfileDetailsModalView: View {
     let profile: DDGProfile
     var body: some View {
         ZStack(alignment: .top){
-            CircularImage(uiImage: profile.createAvatarImage(), radius: 50)
+            CircularImage(uiImage: profile.avatarImage, radius: 50)
                 .accessibilityHidden(true)
                 .alignmentGuide(VerticalAlignment.top) { $0[VerticalAlignment.center] }
                         .zIndex(1)
-                        .shadow(radius: 10)
+                        .shadow(color:.black.opacity(0.5),
+                                radius: 5,
+                                x: 0,
+                                y: 4)
                         
             VStack{
                 Spacer()
@@ -61,6 +64,9 @@ struct ProfileDetailsModalView: View {
             })
         
         }
+        .accessibilityAddTraits(.isModal)
+        .transition(.slide)
+        .zIndex(1)
         
     }
 }

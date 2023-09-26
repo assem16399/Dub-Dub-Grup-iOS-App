@@ -12,17 +12,15 @@ struct AppTabView: View {
     
     var body: some View {
         TabView{
+            
             LocationMapView()
                 .tabItem{ Label("Map", systemImage: "map") }
+               
+            NavigationView{ LocationsListView() }
+            .tabItem{ Label("Locations", systemImage: "list.clipboard.fill") }
             
-            LocationsListView()
-                .tabItem{ Label("Locations", systemImage: "list.clipboard.fill") }
-            
-            NavigationStack {
-                ProfileView()
-            }
-            .tabItem{ Label("Profile", systemImage: "person")
-            }
+            NavigationStack { ProfileView() }
+            .tabItem{ Label("Profile", systemImage: "person") }
         }
         .onAppear{
             configTabBarAppearance()
@@ -33,7 +31,7 @@ struct AppTabView: View {
         .sheet(isPresented: $viewModel.isOnBoardingDisplayed,
                onDismiss:viewModel.checkIfLocationServicesIsEnabled)
         {
-            OnBoardingView(isOnBoardingDisplayed: $viewModel.isOnBoardingDisplayed)
+            OnBoardingView()
         }
     }
     

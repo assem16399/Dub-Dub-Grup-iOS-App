@@ -10,7 +10,7 @@ import UIKit
 
 extension CKAsset{
     func convertToUIImage(in dimension: ImageDimension) -> UIImage {
-        let placeHolder = ImageDimension.getPlaceHolder(for: dimension)
+        let placeHolder = dimension.placeHolder
         
         guard let fileURL else { return placeHolder }
         

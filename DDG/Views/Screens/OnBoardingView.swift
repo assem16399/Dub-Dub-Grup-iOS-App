@@ -8,19 +8,21 @@
 import SwiftUI
 
 struct OnBoardingView: View {
-    @Binding var isOnBoardingDisplayed: Bool
+    @Environment(\.presentationMode) var presentationMode
     var body: some View {
         VStack{
             HStack{
                 Spacer()
+                
                 Button{
-                    isOnBoardingDisplayed = false
+                    presentationMode.wrappedValue.dismiss()
                 }label: {
                     XDismissButton()
                 }
-            }
-            .padding()
+            }.padding()
+            
             Spacer()
+            
             LogoView(height: 155).shadow(radius: 10)
             
             VStack(alignment:.leading, spacing:20){
@@ -42,9 +44,7 @@ struct OnBoardingView: View {
                     title: "Find Friends",
                     subtitle: "See Where other iOS Devs are and join the party"
                 )
-                
-            }
-            .padding(.horizontal,50)
+            }.padding(.horizontal,50)
             
             Spacer()
             
@@ -54,11 +54,11 @@ struct OnBoardingView: View {
 
 struct OnBoardingView_Previews: PreviewProvider {
     static var previews: some View {
-        OnBoardingView(isOnBoardingDisplayed: .constant(true))
+        OnBoardingView()
     }
 }
 
-struct OnBoardingTile: View {
+fileprivate struct OnBoardingTile: View {
     let sfSymbol: String
     let title: String
     let subtitle: String

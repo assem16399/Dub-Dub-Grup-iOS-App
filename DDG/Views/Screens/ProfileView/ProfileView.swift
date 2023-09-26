@@ -11,101 +11,110 @@ import CloudKit
 struct ProfileView: View {
     @StateObject private var viewModel = ProfileViewModel()
     var body: some View {
-        ZStack{
-            VStack{
-                ZStack{
-                    Color(uiColor: .secondarySystemBackground)
-                        .cornerRadius(12)
-                    
-                    HStack(spacing: 8){
-                        Button{ viewModel.isShowingPhotoPicker = true } label: {
-                            ZStack {
-                                CircularImage(uiImage:viewModel.avatar, radius: 45)
-                                
-                                ProfileImageEditIcon()
-                            }
-                        }
-                        
-                        VStack(alignment: .leading,spacing: 0){
-                            TextField("FirstName", text: $viewModel.firstName)
-                                .profileNameTextFieldStyle()
-                            
-                            TextField("Last Name", text: $viewModel.lastName)
-                                .profileNameTextFieldStyle()
-                            
-                            TextField("Job", text: $viewModel.job)
-                                .autocorrectionDisabled()
-                                .minimumScaleFactor(0.75)
-                        }
-                        .padding(.trailing)
-                    }
-                    .padding()
-                }
-                .frame( height: 130)
-                
+        ScrollView{
+            ZStack{
                 VStack{
-                    HStack{
-                        RemainedCharactersView(remainsChars: viewModel.remainsChars)
+                    ZStack{
+                        Color(uiColor: .secondarySystemBackground)
+                            .cornerRadius(12)
                         
-                        Spacer()
-                        
-                        if viewModel.isUserCheckedIn
-                        {
-                            Button{
-                                viewModel.checkOut()
-                            }label: {
-                                Label("Check Out", systemImage: "mappin.and.ellipse")
+                        HStack(spacing: 8){
+                            Button{ viewModel.isShowingPhotoPicker = true } label: {
+                                ZStack {
+                                    CircularImage(uiImage:viewModel.avatar, radius: 45)
+                                    ProfileImageEditIcon()
+                                }
+                                .accessibilityElement(children: .ignore)
+                                .accessibilityAddTraits(.isButton)
+                                .accessibilityLabel(Text("Profile Photo"))
+                                .accessibilityHint(Text("Opens iPhone photo picker"))
                             }
-                            .buttonStyle(.borderedProminent)
-                            .tint(Color(uiColor: .systemRed))
+                            
+                            VStack(alignment: .leading,spacing: 0){
+                                TextField("FirstName", text: $viewModel.firstName)
+                                    .profileNameTextFieldStyle()
+                                
+                                TextField("Last Name", text: $viewModel.lastName)
+                                    .profileNameTextFieldStyle()
+                                
+                                TextField("Job", text: $viewModel.job)
+                                    .autocorrectionDisabled()
+                                    .minimumScaleFactor(0.75)
+                            }
+                            .padding(.trailing)
                         }
+                        .padding()
                     }
+                    .frame( height: 130)
                     
-                    UserBioView(userBio: $viewModel.userBio)
+                    VStack{
+                        HStack{
+                            RemainedCharactersView(remainsChars: viewModel.remainsChars)
+                                .accessibilityAddTraits(.isHeader)
+                            
+                            Spacer()
+                            
+                            if viewModel.isUserCheckedIn
+                            {
+                                Button{
+                                    viewModel.checkOut()
+                                    HapticsManager.playSuccessHaptic()
+                                }label: {
+                                    Label("Check Out", systemImage: "mappin.and.ellipse")
+                                }
+                                .accessibilityLabel("Check out of current location")
+                                .buttonStyle(.borderedProminent)
+                                .tint(Color(uiColor: .systemRed))
+                            }
+                        }
+                        
+                        UserBioView(userBio: $viewModel.userBio)
+                            .accessibilityLabel(Text("Bio"))
+                            .accessibilityHint(Text("This text field has a 100 character maximum."))
+                    }
+                    .padding(.horizontal, 5)
+                    
+                    Spacer()
+                    
+                    DDGButton(title: viewModel.profileContext == .create
+                              ? "Create Profile"
+                              : "Update Profile")
+                    {
+                        viewModel.profileContext == .create
+                        ? viewModel.createProfile()
+                        : viewModel.updateProfile()
+                    }
                 }
-                .padding(.horizontal, 5)
+                .padding()
                 
-                Spacer()
-                
-                DDGButton(title: viewModel.profileContext == .create
-                          ? "Create Profile"
-                          : "Update Profile")
-                {
-                    viewModel.profileContext == .create
-                    ? viewModel.createProfile()
-                    : viewModel.updateProfile()
-                }
-            }
-            .padding()
-            
-            if viewModel.isLoading{
-                CircularLoadingView()
-            }
-        }
-        
-        .navigationTitle("Profile")
-        .toolbar{
-            ToolbarItem(placement: .keyboard){
-                Button{
-                    dismissKeyboard()
-                }label: {
-                    Image(systemName: "keyboard.chevron.compact.down")
+                if viewModel.isLoading{
+                    CircularLoadingView()
                 }
             }
         }
-        .onAppear{
-            viewModel.getProfile()
-        }
-        .alert(item: $viewModel.alertItem){alert in
-            Alert(title: alert.title,
-                  message: alert.message,
-                  dismissButton: alert.dismissButton
-            )
-        }
-        .sheet(isPresented: $viewModel.isShowingPhotoPicker){
-            PhotoPicker(pickedImage: $viewModel.avatar,
-                        isPhotoPickerDisplayed: $viewModel.isShowingPhotoPicker)
-        }
+            .navigationTitle("Profile")
+            .toolbar{
+                ToolbarItem(placement: .keyboard){
+                    Button{
+                        dismissKeyboard()
+                    }label: {
+                        Image(systemName: "keyboard.chevron.compact.down")
+                    }
+                }
+            }
+            .onAppear{
+                viewModel.getProfile()
+            }
+            .alert(item: $viewModel.alertItem){alert in
+                Alert(title: alert.title,
+                      message: alert.message,
+                      dismissButton: alert.dismissButton
+                )
+            }
+            .sheet(isPresented: $viewModel.isShowingPhotoPicker){
+                PhotoPicker(pickedImage: $viewModel.avatar,
+                            isPhotoPickerDisplayed: $viewModel.isShowingPhotoPicker)
+            }
     }
     
     
