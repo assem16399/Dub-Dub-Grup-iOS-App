@@ -31,9 +31,9 @@ extension LocationsListView {
         
        @ViewBuilder func createLocationDetailsView(for location: DDGLocation, in dynamicTypeSize: DynamicTypeSize) -> some View{
             if dynamicTypeSize >= .accessibility1 {
-                LocationDetailsView(viewModel: LocationDetailsView.LocationDetailsViewModel(location: location)).embedInScrollView()
+                LocationDetailsView(viewModel: LocationDetailsViewModel(location: location)).embedInScrollView()
             }else {
-                LocationDetailsView(viewModel: LocationDetailsView.LocationDetailsViewModel(location: location))
+                LocationDetailsView(viewModel: LocationDetailsViewModel(location: location))
             }
         }
         

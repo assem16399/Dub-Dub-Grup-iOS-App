@@ -8,7 +8,7 @@
 import Foundation
 import CloudKit
 enum profileContext { case create, update }
-
+extension ProfileView {
 final class ProfileViewModel: ObservableObject{
     
     @Published var userBio:String = ""
@@ -212,4 +212,5 @@ final class ProfileViewModel: ObservableObject{
     
     private func hideLoadingView(){ isLoading = false }
     
+}
 }

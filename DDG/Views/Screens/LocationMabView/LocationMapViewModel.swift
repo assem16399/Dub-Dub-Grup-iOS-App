@@ -56,9 +56,9 @@ extension LocationMapView{
         
         @ViewBuilder func createLocationDetailsView(in dynamicTypeSize: DynamicTypeSize) -> some View{
              if dynamicTypeSize >= .accessibility1 {
-                 LocationDetailsView(viewModel: LocationDetailsView.LocationDetailsViewModel(location: selectedMapLocation!)).embedInScrollView()
+                 LocationDetailsView(viewModel: LocationDetailsViewModel(location: selectedMapLocation!)).embedInScrollView()
              }else {
-                 LocationDetailsView(viewModel: LocationDetailsView.LocationDetailsViewModel(location: selectedMapLocation!))
+                 LocationDetailsView(viewModel: LocationDetailsViewModel(location: selectedMapLocation!))
              }
          }
     }

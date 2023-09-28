@@ -12,7 +12,6 @@ import SwiftUI
 
 enum CheckInStatus { case checkedIn, checkedOut }
 
-extension LocationDetailsView {
     
     final class LocationDetailsViewModel: ObservableObject{
         let location: DDGLocation
@@ -22,6 +21,16 @@ extension LocationDetailsView {
         @Published var checkedInProfiles = [DDGProfile]()
         @Published var isUserCheckedIn = false
         @Published var isLoading = false
+        
+        func getGridColumns(for dynamicTypeSize: DynamicTypeSize) -> [GridItem] {
+            dynamicTypeSize < .accessibility1 ? [
+                GridItem(.flexible()),
+                GridItem(.flexible()),
+                GridItem(.flexible())
+            ]: [GridItem(.flexible())]
+        }
+       
+        
         var checkInButtonColor: Color { isUserCheckedIn ? .grubRed : .brandPrimary }
         var checkInButtonIcon: String { isUserCheckedIn ? "person.fill.xmark" : "person.fill.checkmark" }
         var checkInButtonA11yLabel: String { isUserCheckedIn  ? "Checkout of location" : "Check in into location" }
@@ -169,4 +178,4 @@ extension LocationDetailsView {
         func hideLoadingView(from:String = "Default") { isLoading = false }
     }
     
-}
+

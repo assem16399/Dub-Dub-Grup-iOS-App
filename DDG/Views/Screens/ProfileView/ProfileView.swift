@@ -11,13 +11,10 @@ import CloudKit
 struct ProfileView: View {
     @StateObject private var viewModel = ProfileViewModel()
     var body: some View {
-        ScrollView{
-            ZStack{
-                VStack{
-                    ZStack{
-                        Color(uiColor: .secondarySystemBackground)
-                            .cornerRadius(12)
-                        
+        ZStack{
+            VStack{
+                ScrollView{
+                    VStack{
                         HStack(spacing: 8){
                             Button{ viewModel.isShowingPhotoPicker = true } label: {
                                 ZStack {
@@ -44,82 +41,78 @@ struct ProfileView: View {
                             .padding(.trailing)
                         }
                         .padding()
-                    }
-                    .frame( height: 130)
-                    
-                    VStack{
-                        HStack{
-                            RemainedCharactersView(remainsChars: viewModel.remainsChars)
-                                .accessibilityAddTraits(.isHeader)
-                            
-                            Spacer()
-                            
-                            if viewModel.isUserCheckedIn
-                            {
-                                Button{
-                                    viewModel.checkOut()
-                                    HapticsManager.playSuccessHaptic()
-                                }label: {
-                                    Label("Check Out", systemImage: "mappin.and.ellipse")
-                                }
-                                .accessibilityLabel("Check out of current location")
-                                .buttonStyle(.borderedProminent)
-                                .tint(Color(uiColor: .systemRed))
-                            }
-                        }
+                        .background( Color(uiColor: .secondarySystemBackground)
+                            .cornerRadius(12))
+                        .frame( height: 130)
+                        .padding(.bottom)
                         
-                        UserBioView(userBio: $viewModel.userBio)
-                            .accessibilityLabel(Text("Bio"))
-                            .accessibilityHint(Text("This text field has a 100 character maximum."))
+                        VStack{
+                            HStack{
+                                RemainedCharactersView(remainsChars: viewModel.remainsChars)
+                                    .accessibilityAddTraits(.isHeader)
+                                
+                                Spacer()
+                                
+                                if viewModel.isUserCheckedIn
+                                {
+                                    Button{
+                                        viewModel.checkOut()
+                                        HapticsManager.playSuccessHaptic()
+                                    }label: {
+                                        Label("Check Out", systemImage: "mappin.and.ellipse")
+                                    }
+                                    .accessibilityLabel("Check out of current location")
+                                    .buttonStyle(.borderedProminent)
+                                    .tint(Color(uiColor: .systemRed))
+                                }
+                            }
+                            
+                            UserBioView(userBio: $viewModel.userBio)
+                                .accessibilityLabel(Text("Bio"))
+                                .accessibilityHint(Text("This text field has a 100 character maximum."))
+                        }
+                        .padding(.horizontal, 5)
+                        
+                        Spacer()
+                        
                     }
-                    .padding(.horizontal, 5)
                     
-                    Spacer()
-                    
-                    DDGButton(title: viewModel.profileContext == .create
-                              ? "Create Profile"
-                              : "Update Profile")
-                    {
-                        viewModel.profileContext == .create
-                        ? viewModel.createProfile()
-                        : viewModel.updateProfile()
-                    }
                 }
-                .padding()
-                
-                if viewModel.isLoading{
-                    CircularLoadingView()
+                Spacer()
+                DDGButton(title: viewModel.profileContext == .create
+                          ? "Create Profile"
+                          : "Update Profile"){
+                    viewModel.profileContext == .create
+                    ? viewModel.createProfile()
+                    : viewModel.updateProfile()
+                }
+            }
+            .padding()
+
+            
+            if viewModel.isLoading{
+                CircularLoadingView()
+            }
+        }
+        .navigationTitle("Profile")
+        .onAppear{
+            viewModel.getProfile()
+        }
+        .alert(item: $viewModel.alertItem){ Alert(from: $0) }
+        .sheet(isPresented: $viewModel.isShowingPhotoPicker){
+            PhotoPicker(pickedImage: $viewModel.avatar,
+                        isPhotoPickerDisplayed: $viewModel.isShowingPhotoPicker)
+        }
+        .toolbar{
+            ToolbarItem(){
+                Button{
+                    dismissKeyboard()
+                }label: {
+                    Image(systemName: "keyboard.chevron.compact.down")
                 }
             }
         }
-            .navigationTitle("Profile")
-            .toolbar{
-                ToolbarItem(placement: .keyboard){
-                    Button{
-                        dismissKeyboard()
-                    }label: {
-                        Image(systemName: "keyboard.chevron.compact.down")
-                    }
-                }
-            }
-            .onAppear{
-                viewModel.getProfile()
-            }
-            .alert(item: $viewModel.alertItem){alert in
-                Alert(title: alert.title,
-                      message: alert.message,
-                      dismissButton: alert.dismissButton
-                )
-            }
-            .sheet(isPresented: $viewModel.isShowingPhotoPicker){
-                PhotoPicker(pickedImage: $viewModel.avatar,
-                            isPhotoPickerDisplayed: $viewModel.isShowingPhotoPicker)
-            }
     }
-    
-    
-    
-    
 }
 
 struct ProfileView_Previews: PreviewProvider {
@@ -130,7 +123,19 @@ struct ProfileView_Previews: PreviewProvider {
     }
 }
 
-struct RemainedCharactersView: View {
+fileprivate struct ProfileImageEditIcon: View {
+    var body: some View {
+        Image(systemName: "square.and.pencil")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 14,height: 14)
+            .foregroundColor(.white)
+            .padding(.bottom)
+            .offset(x: 0,y: 40)
+    }
+}
+
+fileprivate struct RemainedCharactersView: View {
     let remainsChars:Int
     var body: some View{
         Text("Bio ")
@@ -143,20 +148,7 @@ struct RemainedCharactersView: View {
     }
 }
 
-struct ProfileImageEditIcon: View {
-    var body: some View {
-        Image(systemName: "square.and.pencil")
-            .resizable()
-            .scaledToFit()
-            .frame(width: 14,height: 14)
-            .foregroundColor(.white)
-            .padding(.bottom)
-            .offset(x: 0,y: 40)
-    }
-}
-
-
-struct UserBioView: View {
+fileprivate struct UserBioView: View {
     @Binding var userBio: String
     var body: some View {
         TextEditor(text: $userBio)
