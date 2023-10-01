@@ -14,81 +14,68 @@ struct ProfileView: View {
         ZStack{
             VStack{
                 ScrollView{
-                    VStack{
-                        HStack(spacing: 8){
-                            Button{ viewModel.isShowingPhotoPicker = true } label: {
-                                ZStack {
-                                    CircularImage(uiImage:viewModel.avatar, radius: 45)
-                                    ProfileImageEditIcon()
-                                }
-                                .accessibilityElement(children: .ignore)
-                                .accessibilityAddTraits(.isButton)
-                                .accessibilityLabel(Text("Profile Photo"))
-                                .accessibilityHint(Text("Opens iPhone photo picker"))
-                            }
-                            
-                            VStack(alignment: .leading,spacing: 0){
-                                TextField("FirstName", text: $viewModel.firstName)
-                                    .profileNameTextFieldStyle()
-                                
-                                TextField("Last Name", text: $viewModel.lastName)
-                                    .profileNameTextFieldStyle()
-                                
-                                TextField("Job", text: $viewModel.job)
-                                    .autocorrectionDisabled()
-                                    .minimumScaleFactor(0.75)
-                            }
-                            .padding(.trailing)
+                    HStack(spacing: 8){
+                        
+                        Button{ viewModel.isShowingPhotoPicker = true } label: {
+                            ProfileImagePickerView(uiImage: viewModel.avatar)
                         }
-                        .padding()
-                        .background( Color(uiColor: .secondarySystemBackground)
-                            .cornerRadius(12))
-                        .frame( height: 130)
-                        .padding(.bottom)
                         
-                        VStack{
-                            HStack{
-                                RemainedCharactersView(remainsChars: viewModel.remainsChars)
-                                    .accessibilityAddTraits(.isHeader)
-                                
-                                Spacer()
-                                
-                                if viewModel.isUserCheckedIn
-                                {
-                                    Button{
-                                        viewModel.checkOut()
-                                        HapticsManager.playSuccessHaptic()
-                                    }label: {
-                                        Label("Check Out", systemImage: "mappin.and.ellipse")
-                                    }
-                                    .accessibilityLabel("Check out of current location")
-                                    .buttonStyle(.borderedProminent)
-                                    .tint(Color(uiColor: .systemRed))
-                                }
-                            }
+                        VStack(alignment: .leading,spacing: 0){
+                            TextField("FirstName", text: $viewModel.firstName)
+                                .profileNameTextFieldStyle()
                             
-                            UserBioView(userBio: $viewModel.userBio)
-                                .accessibilityLabel(Text("Bio"))
-                                .accessibilityHint(Text("This text field has a 100 character maximum."))
+                            TextField("Last Name", text: $viewModel.lastName)
+                                .profileNameTextFieldStyle()
+                            
+                            TextField("Job", text: $viewModel.job)
+                                .autocorrectionDisabled()
+                                .minimumScaleFactor(0.75)
                         }
-                        .padding(.horizontal, 5)
-                        
-                        Spacer()
-                        
+                        .padding(.trailing)
                     }
+                    .padding()
+                    .background(Color(uiColor: .secondarySystemBackground))
+                    .cornerRadius(12)
+                    .frame(height: 130)
+                    .padding(.bottom)
+                    
+                    VStack{
+                        HStack{
+                            RemainedCharactersView(remainsChars: viewModel.remainsChars)
+                                .accessibilityAddTraits(.isHeader)
+                            
+                            Spacer()
+                            
+                            if viewModel.isUserCheckedIn
+                            {
+                                Button{
+                                    viewModel.checkOut()
+                                }label: {
+                                    Label("Check Out", systemImage: "mappin.and.ellipse")
+                                }
+                                .accessibilityLabel("Check out of current location")
+                                .buttonStyle(.borderedProminent)
+                                .tint(Color(uiColor: .systemRed))
+                            }
+                        }
+                        
+                        UserBioView(userBio: $viewModel.userBio)
+                            
+                    }
+                    .padding(.horizontal, 5)
+                    
+                    Spacer()
                     
                 }
+
+                
                 Spacer()
-                DDGButton(title: viewModel.profileContext == .create
-                          ? "Create Profile"
-                          : "Update Profile"){
-                    viewModel.profileContext == .create
-                    ? viewModel.createProfile()
-                    : viewModel.updateProfile()
+                
+                DDGButton(title: viewModel.submitButtonTitle){
+                    viewModel.onSubmitButtonPressed()
                 }
             }
             .padding()
-
             
             if viewModel.isLoading{
                 CircularLoadingView()
@@ -160,5 +147,21 @@ fileprivate struct UserBioView: View {
                 RoundedRectangle(cornerRadius: 12)
                     .stroke(Color.secondary, lineWidth: 1)
             )
+            .accessibilityLabel(Text("Bio"))
+            .accessibilityHint(Text("This text field has a 300 character maximum."))
+    }
+}
+
+fileprivate struct ProfileImagePickerView: View {
+    let uiImage: UIImage
+    var body: some View {
+        ZStack {
+            CircularImage(uiImage: uiImage, radius: 45)
+            ProfileImageEditIcon()
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityAddTraits(.isButton)
+        .accessibilityLabel(Text("Profile Photo"))
+        .accessibilityHint(Text("Opens iPhone photo picker"))
     }
 }
