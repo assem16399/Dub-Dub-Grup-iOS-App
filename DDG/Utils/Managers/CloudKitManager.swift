@@ -45,16 +45,15 @@ final class CloudKitManager {
         query.sortDescriptors = [sortDescriptor]
         
         
-        CKContainer.default().publicCloudDatabase.perform(query, inZoneWith: nil){
-            records, error in
-            guard error == nil else{
+        CKContainer.default().publicCloudDatabase.perform(query, inZoneWith: nil){ records, error in
+            guard let records, error == nil else {
+                print(error!.localizedDescription)
                 completed(.failure(error!))
                 return
             }
             
-            guard let records else { return }
-            
-            let locations = records.map{DDGLocation(record: $0)}
+            //let locations = records.map{DDGLocation(record: $0)}
+            let locations = records.map(DDGLocation.init)
             completed(.success(locations))
         }
     }
@@ -84,12 +83,13 @@ final class CloudKitManager {
             guard let records, error == nil else {
                 completed(.failure(error!))
                 return}
-            let profiles = records.map{DDGProfile(record: $0)}
+            //let profiles = records.map{DDGProfile(record: $0)}
+            let profiles = records.map(DDGProfile.init)
             completed(.success(profiles))
         }
     }
     
-    private func createGetAllChecedInProfilesCKOperation() -> CKQueryOperation {
+    private func createGetAllCheckedInProfilesCKOperation() -> CKQueryOperation {
         let predicate = NSPredicate(format: "\(DDGProfile.kIsCheckedInNilCheck) == 1")
         let query = CKQuery(recordType: RecordType.profile, predicate: predicate)
         let operation = CKQueryOperation(query: query)
@@ -98,15 +98,14 @@ final class CloudKitManager {
     
     func getAllPlacesCheckedInProfiles( completed: @escaping (Result<[CKRecord.ID: [DDGProfile]] ,Error>) -> Void) {
        
-        let operation = createGetAllChecedInProfilesCKOperation()
+        let operation = createGetAllCheckedInProfilesCKOperation()
             // Uncomment if u wanna get specific data fields only
         //operation.desiredKeys [DDGProfile.kAvatar, DDGProfile.kIsCheckedIn]
         var checkedInProfiles = [CKRecord.ID: [DDGProfile]]()
         operation.recordFetchedBlock = {record in
-            let profile = DDGProfile(record: record)
             // Build our dictionary
-            guard let checkedInLocationRefID = profile.isCheckedIn?.recordID else {return}
-            checkedInProfiles[checkedInLocationRefID, default: []].append(profile)
+            guard let checkedInLocationRecordRef = record[DDGProfile.kIsCheckedIn] as? CKRecord.Reference else { return }
+            checkedInProfiles[checkedInLocationRecordRef.recordID, default: []].append(DDGProfile(record: record))
         }
         operation.queryCompletionBlock = {cursor, error in
             if let error  {
@@ -122,7 +121,7 @@ final class CloudKitManager {
     }
     
     func getAllPlacesCheckedInProfilesCount( completed: @escaping (Result<[CKRecord.ID: Int] ,Error>) -> Void) {
-        let operation = createGetAllChecedInProfilesCKOperation()
+        let operation = createGetAllCheckedInProfilesCKOperation()
             
         operation.desiredKeys = [DDGProfile.kIsCheckedIn]
         
